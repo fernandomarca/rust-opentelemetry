@@ -1,0 +1,22 @@
+FROM rust:1.78-alpine3.18 as build
+
+ENV RUSTFLAGS="-C target-feature=-crt-static"
+
+RUN apk add --no-cache build-base libgcc musl-dev libressl pkgconfig libpq-dev
+
+WORKDIR /app
+
+COPY . .
+
+RUN cargo build --release
+
+# production environment
+FROM rust:1.78-alpine3.18
+
+RUN apk add --no-cache libgcc libpq-dev ca-certificates
+
+COPY --from=build /app/target/release/app_fmm /bin
+
+EXPOSE 3333
+
+CMD [ "app_fmm" ]

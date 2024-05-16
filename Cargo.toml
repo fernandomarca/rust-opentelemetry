@@ -1,0 +1,25 @@
+[package]
+name = "app_fmm"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+members = [".", "migration"]
+
+[dependencies]
+
+migration = { path = "migration" }
+
+actix-web = "4.5.1"
+dotenvy = "0.15.7"
+sea-orm = { version = "0.12.15", features = [
+  "sqlx-postgres",
+  "runtime-tokio-rustls",
+  "macros",
+  "debug-print",
+] }
+
+listenfd = "1.0.1"
+serde = "1.0.202"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+log = "0.4.21"

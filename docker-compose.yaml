@@ -1,0 +1,13 @@
+# criar docker compose para subir o banco de dados postgres
+version: '3'
+services:
+  fmm_db:
+    container_name: fmm_db
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    
