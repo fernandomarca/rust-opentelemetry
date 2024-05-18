@@ -40,3 +40,31 @@ async fn list(req: HttpRequest, data: web::Data<AppState>) -> Result<HttpRespons
         num_pages,
     }))
 }
+
+// #[get("/persons")]
+// async fn persons(req: HttpRequest, data: web::Data<AppState>) -> Result<HttpResponse, Error> {
+//     let pool = create_pool().await.unwrap();
+//     let mut client = pool.get().await.unwrap();
+//     let tokio_client = client.into();
+
+//     let persons = find_person::get_persons()
+//         .bind(&tokio_client)
+//         .all()
+//         .await
+//         .unwrap();
+
+//     Ok(HttpResponse::Ok().json({}))
+// }
+
+// use deadpool_postgres::{Config, CreatePoolError, Pool, Runtime};
+// use tokio_postgres::NoTls;
+
+// async fn create_pool() -> Result<Pool, CreatePoolError> {
+//     let mut cfg = Config::new();
+//     cfg.user = Some(String::from("postgres"));
+//     cfg.password = Some(String::from("root"));
+//     cfg.host = Some(String::from("127.0.0.1"));
+//     cfg.port = Some(5432);
+//     cfg.dbname = Some(String::from("postgres"));
+//     cfg.create_pool(Some(Runtime::Tokio1), NoTls)
+// }

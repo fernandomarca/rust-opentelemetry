@@ -18,8 +18,56 @@ sea-orm = { version = "0.12.15", features = [
   "macros",
   "debug-print",
 ] }
+postgres-types = "0.2.6"
+tokio-postgres = "0.7.10"
+futures = "0.3.30"
+cornucopia_async = "0.6.0"
+deadpool-postgres = "0.13.2"
 
 listenfd = "1.0.1"
 serde = "1.0.202"
-tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+serde_json = "1.0.117"
+
+# tracing
+tracing-actix-web = "0.7.10"
 log = "0.4.21"
+
+# version 23
+
+# tracing = { version = "0.1.40", features = ["log", "std"] }
+# tracing-core = "0.1.32"
+# tracing-subscriber = { version = "0.3.18", features = [
+#   "env-filter",
+#   "registry",
+#   "std",
+#   "fmt",
+# ] }
+# opentelemetry-otlp = { version = "0.16.0", features = ["tonic", "metrics"] }
+# opentelemetry = { version = "0.23.0", features = ["trace", "metrics"] }
+# tracing-opentelemetry = "0.23.0"
+# opentelemetry_sdk = { version = "0.23.0", features = ["rt-tokio", "trace"] }
+# opentelemetry-semantic-conventions = "0.15.0"
+# opentelemetry-jaeger = "0.22.0"
+# opentelemetry-stdout = { version = "0.4.0", features = ["logs"] }
+# opentelemetry-appender-log = { version = "0.4.0" }
+# tracing-bunyan-formatter = "0.3"
+
+
+# version 22
+opentelemetry = { version = "0.22.0", features = ["trace", "metrics"] }
+tracing-opentelemetry = "0.23.0"
+opentelemetry_sdk = { version = "0.22.1", features = ["rt-tokio", "trace"] }
+opentelemetry-otlp = { version = "0.15.0", features = ["metrics"] }
+#
+tracing-core = "0.1.32"
+tracing-log = { version = "0.2.0" }
+opentelemetry-jaeger = "0.22.0"
+opentelemetry-stdout = { version = "0.3.0", features = ["trace", "metrics"] }
+opentelemetry-semantic-conventions = "0.15.0"
+tracing = { version = "0.1.40", features = ["std", "attributes"] }
+tracing-error = "0.2.0"
+tracing-subscriber = { version = "0.3.18", features = [
+  "registry",
+  "std",
+  "fmt",
+] }
