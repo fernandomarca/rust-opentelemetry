@@ -1,0 +1,10 @@
+# coverage:
+#   status:
+#     patch:
+#       default:
+#         threshold: 0.05%
+#     project:
+#       default:
+#         threshold: 0.05%
+
+# curl -X POST --data-binary @codecov.yml https://codecov.io/validate
