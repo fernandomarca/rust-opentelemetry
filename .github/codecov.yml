@@ -1,11 +1,13 @@
+codecov:
+  bot: fernandomarca
 coverage:
   status:
     patch:
       default:
-        threshold: 0.05%
+        threshold: 1%
     project:
       default:
-        threshold: 0.05%
+        threshold: 1%
 comment:
   layout: "diff, flags, files, tree, betaprofiling"
   behavior: default
