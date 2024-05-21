@@ -4,10 +4,12 @@ coverage:
   status:
     patch:
       default:
+        target: 50%
         threshold: 1%
     project:
       default:
-        threshold: 25%
+        target: 100%
+        threshold: 1%
 comment:
   layout: "diff, flags, files, tree, betaprofiling"
   behavior: default
