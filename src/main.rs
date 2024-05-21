@@ -171,3 +171,18 @@ fn init(cfg: &mut web::ServiceConfig) {
     cfg.service(list);
     cfg.service(hello);
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::CreatePostRequest;
+
+    #[test]
+    fn test_create_post_request() {
+        let req = CreatePostRequest {
+            title: "title".to_string(),
+            text: "text".to_string(),
+        };
+        assert_eq!(req.title, "title");
+        assert_eq!(req.text, "text");
+    }
+}
