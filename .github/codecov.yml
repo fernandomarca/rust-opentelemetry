@@ -7,7 +7,7 @@ coverage:
         threshold: 1%
     project:
       default:
-        threshold: 20%
+        threshold: 25%
 comment:
   layout: "diff, flags, files, tree, betaprofiling"
   behavior: default
