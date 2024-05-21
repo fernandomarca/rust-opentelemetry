@@ -1,32 +1,46 @@
 name: Workflow for Codecov example-rust
-on: [push, pull_request]
+on: 
+  pull_request:
+    branches:
+      - develop
 jobs:
-  run:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Install rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: nightly
-          override: true
-          default: true
-          components: llvm-tools
-      - name: Install cargo-llvm-cov
-        run: cargo install cargo-llvm-cov
+  check-application:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+        
+        - name: Install rust toolchain
+          uses: actions-rs/toolchain@v1
+          with:
+            toolchain: nightly
+            override: true
+            default: true
+            components: llvm-tools
+        
+        - name: instal check
+          run: rustup show
+        - name : Install version
+          run: cargo --version
+        - name: Build
+          run:  cargo build --verbose
+      
+        - name: Run tests
+          run: cargo test --verbose --all-features
+        - name: Install cargo-llvm-cov
+          run: cargo install cargo-llvm-cov
 
-      - name: Measure coverage
-        run: RUST_LOG=trace cargo llvm-cov --all-features --lcov --output-path ./lcov.info
+        - name: Measure coverage
+          run: RUST_LOG=trace cargo llvm-cov --all-features --lcov --output-path ./lcov.info
 
-      - name: Report to codecov.io
-        uses: codecov/codecov-action@v4
-        with:
-          files: ./lcov.info
-          fail_ci_if_error: true
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        - name: Report to codecov.io
+          uses: codecov/codecov-action@v4
+          with:
+            files: ./lcov.info
+            fail_ci_if_error: true
+          env:
+            CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
       
