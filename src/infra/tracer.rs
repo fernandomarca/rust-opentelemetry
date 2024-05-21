@@ -135,3 +135,23 @@ fn init_meter_provider() -> SdkMeterProvider {
 
     meter_provider
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use opentelemetry::Key;
+
+    #[test]
+    fn teste_resource() {
+        let resource = resource();
+        let service = resource.get(Key::new(SERVICE_NAME));
+        let version = resource.get(Key::new(SERVICE_VERSION));
+        let deployment = resource.get(Key::new(DEPLOYMENT_ENVIRONMENT));
+        assert!(service.is_some());
+        assert_eq!(service.unwrap().to_string(), "app_fmm");
+        assert!(version.is_some());
+        assert_eq!(version.unwrap().to_string(), "0.1.0");
+        assert!(deployment.is_some());
+        assert_eq!(deployment.unwrap().to_string(), "develop");
+    }
+}

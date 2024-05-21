@@ -1,0 +1,140 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otel-collector-conf
+  namespace: observability
+  labels:
+    app: opentelemetry
+    component: otel-collector-conf
+data:
+  otel-collector-config: |
+    receivers:
+      jaeger:
+        protocols:
+          grpc:
+
+      otlp:
+        protocols:
+          http:
+          grpc:
+
+    exporters:
+      # debug: {}
+
+      # logging:
+      #   loglevel: debug
+      
+      otlp/jaeger:
+        endpoint: "simple-prod-collector.observability.svc.cluster.local:4317"
+        tls:
+          insecure: true
+
+    processors:
+      batch:
+
+    extensions:
+      health_check:
+      pprof:
+        endpoint: :1888
+      zpages:
+        endpoint: :55679
+
+    service:
+      extensions: [pprof, zpages, health_check]
+      pipelines:
+        traces:
+          receivers: [otlp, jaeger]
+          processors: [batch]
+          exporters: [otlp/jaeger]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otel-collector
+  labels:
+    app: opencesus
+    component: otel-collector
+spec:
+  ports:
+    - name: otel
+      port: 4317
+      protocol: TCP
+      targetPort: 4317
+    - name: pprof
+      port: 1888
+      protocol: TCP
+      targetPort: 1888
+    - name: prometheus
+      port: 8888
+      protocol: TCP
+      targetPort: 8888
+    - name: prometheus-exporter
+      port: 8889
+      protocol: TCP
+      targetPort: 8889
+    - name: health-check
+      port: 13133
+      protocol: TCP
+      targetPort: 13133
+    - name: otel-http
+      port: 4318
+      protocol: TCP
+      targetPort: 4318
+    - name: zpages
+      port: 55670
+      protocol: TCP
+      targetPort: 55679
+  selector:
+    component: otel-collector
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-collector
+  labels:
+    app: opentelemetry
+    component: otel-collector
+spec:
+  replicas: 1 # scale out based on your usage
+  selector:
+    matchLabels:
+      app: opentelemetry
+  template:
+    metadata:
+      labels:
+        app: opentelemetry
+        component: otel-collector
+    spec:
+      containers:
+        - name: otel-collector
+          image: otel/opentelemetry-collector-contrib-dev:latest
+          command:
+            - "/otelcontribcol"
+            - "--config=/conf/otel-collector-config.yaml"
+          resources:
+            limits:
+              cpu: 500m
+              memory: 800Mi
+            requests:
+              cpu: 200m
+              memory: 400Mi
+          ports:
+            - containerPort: 4317 # Default endpoint for OTEL receiver.
+          volumeMounts:
+            - name: otel-collector-config-vol
+              mountPath: /conf
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 13133
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 13133
+      volumes:
+        - configMap:
+            name: otel-collector-conf
+            items:
+              - key: otel-collector-config
+                path: otel-collector-config.yaml
+          name: otel-collector-config-vol
